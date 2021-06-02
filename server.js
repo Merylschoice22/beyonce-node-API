@@ -62,16 +62,16 @@ app.post("/albums", (req, res) => {
 app.delete("/albums/:albumID", (req, res) => {
   //Get the album ID that we want to delete
   const albumID = req.params.albumID;
+  console.log(albumID);
   //Find the album with that ID number in the array
   const album = albumsData.find((album) => {
     return album.albumId == albumID;
   });
-  console.log(albumID);
   console.log(albumsData.indexOf(album));
-  //Remove that object from the array replacing it with an undefined placeholder so as not to mess up the ID count of the rest of the objects
+  //Remove that object from the array replacing it with an undefined placeholder so as not to mess up the index count of the rest of the objects
   albumsData.splice(albumsData.indexOf(album), 1, undefined);
   //Return the updated array
-  res.send(albumsData);
+  res.send(albumsData); //.status(204) ??
 });
 
-app.listen(5000, () => console.log("The server is listening to port 5000"));
+app.listen(5000, () => console.log("Your app is listening to port 5000"));
