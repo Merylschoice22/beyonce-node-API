@@ -44,10 +44,10 @@ app.get("/albums/:albumID", (req, res) => {
   }
 });
 
+//Adding a new album
 app.post("/albums", (req, res) => {
   //get new album object from request - Enter information into the body of Postman. Since it is a json object, make sure to change the format from TEXT to JSON. In order to read the body here, add an app.use(express.json()) at the top of the page. The object in the body will not have an ID because we will not add a new item with our own ID - the system would assign the ID
   const album = req.body;
-  console.log(req.body);
   //Assign the ID by finding the ID number of the last item in the array and incrementing by one. Formatting is necessary to add a number to a Number and then to read it as a string since will be part of a json file
   const albumId = (
     parseInt(albumsData[albumsData.length - 1].albumId) + 1
@@ -56,6 +56,22 @@ app.post("/albums", (req, res) => {
   albumsData.push({ albumId, ...album });
   console.log(albumsData); //So we can see here the final albums array
   res.send({ success: true });
+});
+
+//Deleting an album
+app.delete("/albums/:albumID", (req, res) => {
+  //Get the album ID that we want to delete
+  const albumID = req.params.albumID;
+  //Find the album with that ID number in the array
+  const album = albumsData.find((album) => {
+    return album.albumId == albumID;
+  });
+  console.log(albumID);
+  console.log(albumsData.indexOf(album));
+  //Remove that object from the array replacing it with an undefined placeholder so as not to mess up the ID count of the rest of the objects
+  albumsData.splice(albumsData.indexOf(album), 1, undefined);
+  //Return the updated array
+  res.send(albumsData);
 });
 
 app.listen(5000, () => console.log("The server is listening to port 5000"));
